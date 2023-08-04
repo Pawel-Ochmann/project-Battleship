@@ -4,7 +4,7 @@
   "description": "Another project from Odin's course. Creating battleship game, using TDD with jest, trying to separate logic and DOM implementation, create simple graphical interface.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --coverage",
+    "test": "jest",
     "serve": "webpack-dev-server --open"
   },
   "browserslist": [

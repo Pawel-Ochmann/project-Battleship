@@ -1,5 +1,3 @@
-function add(a, b) {
-  return a + b;
-}
+const logicMethods = require('./logic');
 
-module.exports = { add };
+console.log(logicMethods.add(2,3));
