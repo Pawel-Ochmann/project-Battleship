@@ -22,7 +22,6 @@ header h1 {
 
 main {
   display: flex;
-  justify-content: center;
   gap: 2rem;
   .board {
     align-self: center;
@@ -34,10 +33,12 @@ main {
       width: 50px;
       height: 50px;
       border: 1px solid white;
+      transition: 0.3s;
+    }
+    img {
+      height: 50px;
+      width: 50px;
     }
   }
 }
 
-#boat {
-  filter:hue-rotate(90deg);
-}
