@@ -71,11 +71,9 @@ function createGameboard() {
   };
 }
 
-
 const testGameBoard = createGameboard();
 testGameBoard.placeShip(1, 'A', testGameBoard.ships.destroyer1);
 testGameBoard.receiveAttack(1, 'A');
-console.log(testGameBoard.shipsSunk());
 
-module.exports = { createShip, createGameboard, createPlayer };
 
+module.exports = { createShip, createGameboard };

@@ -1,0 +1,43 @@
+@font-face {
+  font-family: 'tangerine';
+  src: url('./fonts/Tangerine-Regular.ttf');
+}
+
+html {
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  justify-items: center;
+}
+
+header h1 {
+  font-size: 60px;
+  color: rgb(51, 51, 51);
+  font-family: 'tangerine';
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  .board {
+    align-self: center;
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    border: 1px solid black;
+    background-image: url('./images/sea.jpg');
+    div {
+      width: 50px;
+      height: 50px;
+      border: 1px solid white;
+    }
+  }
+}
+
+#boat {
+  filter:hue-rotate(90deg);
+}

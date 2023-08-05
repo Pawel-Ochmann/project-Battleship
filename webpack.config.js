@@ -16,16 +16,12 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
-        test: /\.(png|jpe?g|gif|webp|avif|svg)$/i,
-        use: [
-          {
-            loader: 'file-loader',
-            options: {
-              context: 'public',
-              name: 'images/[name].[hash:8].[ext]',
-            },
-          },
-        ],
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/resource',
       },
     ],
   },
