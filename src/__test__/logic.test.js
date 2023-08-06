@@ -32,10 +32,10 @@ test('boardCreated', () => {
 
 test('boardAttacked', () => {
   testGameBoard.placeShip(1, 'A', testGameBoard.ships.destroyer1);
-  expect(testGameBoard.receiveAttack(1, 'A')).toBe(true);
+  expect(testGameBoard.receiveAttack(1, 1)).toBe(true);
 });
 test('boardAttacked2', () => {
-  expect(testGameBoard.receiveAttack(5, 'B')).toBe(false);
+  expect(testGameBoard.receiveAttack(5, 7)).toBe(false);
 });
 
 test('fleetAlive', () => {
@@ -43,7 +43,7 @@ test('fleetAlive', () => {
 });
 
 test('fleetDead', () => {
-  testGameBoard.placeShip(1, 'A', testGameBoard.ships.destroyer1);
-  testGameBoard.receiveAttack(1, 'A');
+  testGameBoard.placeShip(1, 1, testGameBoard.ships.destroyer1);
+  testGameBoard.receiveAttack(1, 1);
   expect(testGameBoard.shipsSunk()).toBe(true);
 });

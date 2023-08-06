@@ -16,24 +16,52 @@ function appendBoards(board1, board2) {
   }
 }
 
-function placeShip() {
+function placeShip(board) {
   const fields = document.querySelectorAll('.player.board>div');
 
-  const destroyer = document.querySelector('#destroyer');
+  const ships = document.querySelectorAll('.fleet.player img');
 
-  function drag(e) {
-    e.preventDefault();
-    console.log(e);
-    const element = document.elementFromPoint(e.pageX, e.pageY-window.scrollY);
-    element.style.border = '2px solid red';
-    const shipToLoad = new Image();
-    shipToLoad.src = './images/boat.png';
-    console.log(shipToLoad);
-    element.appendChild(shipToLoad);
-    console.log(e, window.scrollY);
+  const rotateIcons = document.querySelectorAll('.fleet i');
+
+  const freeFields = [...fields];
+
+  function showFreeFields() {
+    console.log(freeFields);
+    freeFields.forEach((field) => {
+      field.classList.add('fieldFree');
+    });
+  }
+  function hideFreeFields() {
+    freeFields.forEach((field) => {
+      field.classList.remove('fieldFree');
+    });
   }
 
-  destroyer.addEventListener('dragend', drag);
+  rotateIcons.forEach((icon) => {
+    icon.addEventListener('click', () => {
+      const shipToRotate = icon.nextElementSibling;
+      shipToRotate.classList.toggle('shipRotate');
+    });
+  });
+
+  
+
+  function drag(e) {
+    hideFreeFields();
+    e.preventDefault();
+    const element = document.elementFromPoint(
+      e.pageX - window.scrollX,
+      e.pageY - window.scrollY
+    );
+    const shipToLoad = new Image();
+    shipToLoad.src = this.src;
+    shipToLoad.classList.add('shipToLoad');
+    element.appendChild(shipToLoad);
+  }
+  ships.forEach((ship) => {
+    ship.addEventListener('drag', showFreeFields);
+    ship.addEventListener('dragend', drag);
+  });
 }
 
 module.exports = { appendBoards, placeShip };

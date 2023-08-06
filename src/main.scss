@@ -1,9 +1,11 @@
+@import '@fortawesome/fontawesome-free/css/all.css';
+
 @font-face {
   font-family: 'tangerine';
   src: url('./fonts/Tangerine-Regular.ttf');
 }
 
-html {
+* {
   box-sizing: border-box;
 }
 
@@ -30,15 +32,37 @@ main {
     border: 1px solid black;
     background-image: url('./images/sea.jpg');
     div {
+      position: relative;
       width: 50px;
       height: 50px;
       border: 1px solid white;
       transition: 0.3s;
     }
-    img {
-      height: 50px;
-      width: 50px;
-    }
   }
 }
+.fleet img {
+  background-color: rgb(26, 81, 118);
+  transition: 0.5s;
+}
 
+.shipToLoad {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 50px;
+}
+
+i {
+  font-size: 1.5rem;
+  transition: 0.5s;
+  &:hover {
+    transform: rotate(90deg);
+    cursor: pointer;
+  }
+}
+.shipRotate {
+  transform: rotate(90deg);
+}
+.fieldFree {
+  background-color: rgba($color: green, $alpha: 0.3);
+}

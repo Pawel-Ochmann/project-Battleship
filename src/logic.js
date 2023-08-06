@@ -13,10 +13,10 @@ function createShip(length) {
 
 function createGameboard() {
   function getField(x, y) {
-    return { x: x, y: y, ship: false, clicked: false };
+    return { x: x, y: y, ship: false, free: false };
   }
 
-  const columns = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+  const columns = [1,2,3,4,5,6,7,8,9,10];
   function getBoard() {
     const board = [];
     for (let i = 1; i <= 10; i++) {
@@ -32,15 +32,15 @@ function createGameboard() {
 
     ships: {
       destroyer1: createShip(1),
-      // destroyer2: createShip(1),
-      // destroyer3: createShip(1),
-      // destroyer4: createShip(1),
-      // submarine1: createShip(2),
-      // submarine2: createShip(2),
-      // submarine3: createShip(2),
-      // cruiser1: createShip(3),
-      // cruiser2: createShip(3),
-      // carrier: createShip(4),
+      destroyer2: createShip(1),
+      destroyer3: createShip(1),
+      destroyer4: createShip(1),
+      submarine1: createShip(2),
+      submarine2: createShip(2),
+      submarine3: createShip(2),
+      cruiser1: createShip(3),
+      cruiser2: createShip(3),
+      carrier: createShip(4),
     },
 
     placeShip: function (x, y, ship) {
@@ -68,6 +68,11 @@ function createGameboard() {
       }
       return true;
     },
+
+    checkFieldHorizontal: function(field, shipLength) {
+    
+    return false
+  }
   };
 }
 
