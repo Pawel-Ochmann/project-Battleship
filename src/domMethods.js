@@ -6,7 +6,8 @@ function appendBoards(board1, board2) {
     const box = document.createElement('div');
     box.dataset.x = field.x;
     box.dataset.y = field.y;
-    box.dataset.free = field.free;
+    box.dataset.free = true;
+    box.dataset.ship = false;
     playerBoard.appendChild(box);
   }
   if (board2) {
@@ -19,6 +20,26 @@ function appendBoards(board1, board2) {
   }
 }
 
+function returnField(e, fields) {
+  let field = null;
+  for (const elem of fields) {
+    if (e.x === elem.dataset.x && e.y === elem.dataset.y) {
+      field = elem;
+      break;
+    }
+  }
+  return field;
+}
+
+function updateBoard(arrayFromLogic, fields, ship) {
+  arrayFromLogic.forEach((el) => {
+    const field = returnField(el, fields);
+    console.log(field);
+    field.dataset.ship = ship;
+    field.dataset.free = false;
+  });
+}
+
 function placeShip(board) {
   const fields = document.querySelectorAll('.player.board>div');
 
@@ -29,7 +50,6 @@ function placeShip(board) {
   const freeFields = [...fields].filter((field) => field.dataset.free);
 
   function showFreeFields() {
-    console.log(fields[0].dataset.free);
     freeFields.forEach((field) => {
       field.classList.add('fieldFree');
     });
@@ -57,9 +77,20 @@ function placeShip(board) {
     if (!element.dataset.free) return;
 
     const shipToLoad = new Image();
-    shipToLoad.src = this.src;
+    shipToLoad.src = `./images/${this.dataset.ship}.png`;
     shipToLoad.classList.add('shipToLoad');
     element.appendChild(shipToLoad);
+    this.classList.add('inactive');
+    this.removeEventListener('drag', showFreeFields);
+    this.removeEventListener('dragend', dragend);
+    const places = board.placeShip(
+      element.dataset.x,
+      element.dataset.y,
+      this.dataset.ship
+    );
+    if (!places) return;
+
+    updateBoard(places, fields, this.dataset.ship);
   }
   ships.forEach((ship) => {
     ship.addEventListener('drag', showFreeFields);

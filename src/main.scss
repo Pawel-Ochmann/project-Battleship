@@ -43,6 +43,11 @@ main {
 .fleet img {
   background-color: rgb(26, 81, 118);
   transition: 0.5s;
+  cursor: pointer;
+}
+.fleet img.inactive {
+  filter: grayscale(1);
+  cursor: default;
 }
 
 .shipToLoad {

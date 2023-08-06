@@ -23,6 +23,7 @@ function createGameboard() {
   }
 
   function getShipFields(x, y, ship, board) {
+    if (!ship) return;
     if (x + ship.length > 10) return false;
     const shipFields = [];
     for (let i = 0; i < ship.length; i++) {
@@ -46,32 +47,26 @@ function createGameboard() {
     board: getBoard(),
 
     ships: {
-      boat: createShip(1),
-      // boat2: createShip(1),
-      // boat3: createShip(1),
-      // boat4: createShip(1),
-      destroyer: createShip(2),
-      // destroyer2: createShip(2),
-      // destroyer3: createShip(2),
-      // submarine1: createShip(3),
-      submarine: createShip(3),
+      boat1: createShip(1),
+      boat2: createShip(1),
+      boat3: createShip(1),
+      boat4: createShip(1),
+      destroyer1: createShip(2),
+      destroyer2: createShip(2),
+      destroyer3: createShip(2),
+      submarine1: createShip(3),
+      submarine2: createShip(3),
       carrier: createShip(4),
     },
 
     placeShip: function (x, y, shipName) {
-      // for (const field of this.board) {
-      //   if (field.x === x && field.y === y) {
-      //     field.ship = ship;
-      //     return;
-      //   }
-      // }
-      console.log(this.ships[shipName]);
-      const places = getShipFields(x, y, this.ships[shipName], this.board);
+      const places = getShipFields(+x, +y, this.ships[shipName], this.board);
+      if (!places) return;
       places.forEach((place) => {
         place.ship = shipName;
         place.free = false;
-        console.log(place);
       });
+      return places;
     },
     receiveAttack: function (x, y) {
       for (const field of this.board) {
@@ -89,10 +84,6 @@ function createGameboard() {
         if (!this.ships[ship].isSunk()) return false;
       }
       return true;
-    },
-
-    checkFieldHorizontal: function (field, shipLength) {
-      return false;
     },
   };
 }
