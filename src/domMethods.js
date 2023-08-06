@@ -6,13 +6,16 @@ function appendBoards(board1, board2) {
     const box = document.createElement('div');
     box.dataset.x = field.x;
     box.dataset.y = field.y;
+    box.dataset.free = field.free;
     playerBoard.appendChild(box);
   }
-  for (const field of board2) {
-    const box = document.createElement('div');
-    box.dataset.x = field.x;
-    box.dataset.y = field.y;
-    computerBoard.appendChild(box);
+  if (board2) {
+    for (const field of board2) {
+      const box = document.createElement('div');
+      box.dataset.x = field.x;
+      box.dataset.y = field.y;
+      computerBoard.appendChild(box);
+    }
   }
 }
 
@@ -23,10 +26,10 @@ function placeShip(board) {
 
   const rotateIcons = document.querySelectorAll('.fleet i');
 
-  const freeFields = [...fields];
+  const freeFields = [...fields].filter((field) => field.dataset.free);
 
   function showFreeFields() {
-    console.log(freeFields);
+    console.log(fields[0].dataset.free);
     freeFields.forEach((field) => {
       field.classList.add('fieldFree');
     });
@@ -44,15 +47,15 @@ function placeShip(board) {
     });
   });
 
-  
-
-  function drag(e) {
+  function dragend(e) {
     hideFreeFields();
     e.preventDefault();
     const element = document.elementFromPoint(
       e.pageX - window.scrollX,
       e.pageY - window.scrollY
     );
+    if (!element.dataset.free) return;
+
     const shipToLoad = new Image();
     shipToLoad.src = this.src;
     shipToLoad.classList.add('shipToLoad');
@@ -60,10 +63,8 @@ function placeShip(board) {
   }
   ships.forEach((ship) => {
     ship.addEventListener('drag', showFreeFields);
-    ship.addEventListener('dragend', drag);
+    ship.addEventListener('dragend', dragend);
   });
 }
 
 module.exports = { appendBoards, placeShip };
-
-// style=background-image
