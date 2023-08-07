@@ -16,28 +16,28 @@ function createGameboard() {
     return { x: x, y: y, ship: false, free: true };
   }
 
-  function returnField(x, y, board) {
-    for (const field of board) {
-      if (field.x === x && field.y === y) return field;
-    }
-  }
+  // function returnField(x, y, board) {
+  //   for (const field of board) {
+  //     if (field.x === x && field.y === y) return field;
+  //   }
+  // }
 
-  function getShipFields(x, y, ship, board) {
-    if (!ship) return;
-    if (x + ship.length > 10) return false;
-    const shipFields = [];
-    for (let i = 0; i < ship.length; i++) {
-      shipFields.push(returnField(x + i, y, board));
-    }
-    return shipFields;
-  }
+  // function getShipFields(x, y, ship, board) {
+  //   if (!ship) return;
+  //   if (x + ship.length > 10) return false;
+  //   const shipFields = [];
+  //   for (let i = 0; i < ship.length; i++) {
+  //     shipFields.push(returnField(x + i, y, board));
+  //   }
+  //   return shipFields;
+  // }
 
   const columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
   function getBoard() {
     const board = [];
     for (let i = 1; i <= 10; i++) {
       for (const column of columns) {
-        board.push(getField(i, column));
+        board.push(getField(column, i));
       }
     }
     return board;
@@ -59,15 +59,15 @@ function createGameboard() {
       carrier: createShip(4),
     },
 
-    placeShip: function (x, y, shipName) {
-      const places = getShipFields(+x, +y, this.ships[shipName], this.board);
-      if (!places) return;
-      places.forEach((place) => {
-        place.ship = shipName;
-        place.free = false;
-      });
-      return places;
-    },
+    // placeShip: function (x, y, shipName) {
+    //   const places = getShipFields(+x, +y, this.ships[shipName], this.board);
+    //   if (!places) return;
+    //   places.forEach((place) => {
+    //     place.ship = shipName;
+    //     place.free = false;
+    //   });
+    //   return places;
+    // },
     receiveAttack: function (x, y) {
       for (const field of this.board) {
         if (field.x === x && field.y === y) {

@@ -20,42 +20,56 @@ function appendBoards(board1, board2) {
   }
 }
 
-function returnField(e, fields) {
-  let field = null;
-  for (const elem of fields) {
-    if (e.x === elem.dataset.x && e.y === elem.dataset.y) {
-      field = elem;
-      break;
-    }
+// function returnField(e, fields) {
+//   let field = null;
+//   for (const elem of fields) {
+//     if (e.x === elem.dataset.x && e.y === elem.dataset.y) {
+//       field = elem;
+//       break;
+//     }
+//   }
+//   return field;
+// }
+
+function getShipFieldsHorizontal(length, x, y) {
+  const shipFields = [];
+  for (let i = 0; i < length; i++) {
+    const field = document.querySelector(
+      `div[data-x='${+x + i}'][data-y='${y}'][data-free="true"]`
+    );
+    if (field) shipFields.push(field);
   }
-  return field;
+  return shipFields;
+}
+function getShipFieldsVertical(length, x, y) {
+  const shipFields = [];
+  for (let i = 0; i < length; i++) {
+    const field = document.querySelector(
+      `img[data-x=${x}][data-y=${+y + i}][data-free="true]`
+    );
+    if (field) shipFields.push(field);
+  }
+  return shipFields;
 }
 
-function updateBoard(arrayFromLogic, fields, ship) {
-  arrayFromLogic.forEach((el) => {
-    const field = returnField(el, fields);
-    console.log(field);
-    field.dataset.ship = ship;
-    field.dataset.free = false;
-  });
-}
-
-function placeShip(board) {
-  const fields = document.querySelectorAll('.player.board>div');
-
+function placeShip() {
   const ships = document.querySelectorAll('.fleet.player img');
 
   const rotateIcons = document.querySelectorAll('.fleet i');
 
-  const freeFields = [...fields].filter((field) => field.dataset.free);
+  function getFreeFields() {
+    const freeFields = document.querySelectorAll("div[data-free='true']");
+
+    return freeFields;
+  }
 
   function showFreeFields() {
-    freeFields.forEach((field) => {
+    getFreeFields().forEach((field) => {
       field.classList.add('fieldFree');
     });
   }
   function hideFreeFields() {
-    freeFields.forEach((field) => {
+    getFreeFields().forEach((field) => {
       field.classList.remove('fieldFree');
     });
   }
@@ -76,6 +90,26 @@ function placeShip(board) {
     );
     if (!element.dataset.free) return;
 
+    let shipFields = [];
+    if (this.classList.contains('horizontal')) {
+      shipFields = getShipFieldsHorizontal(
+        this.dataset.length,
+        element.dataset.x,
+        element.dataset.y
+      );
+    } else
+      shipFields = getShipFieldsVertical(
+        this.dataset.length,
+        element.dataset.x,
+        element.dataset.y
+      );
+
+    if (shipFields.length < this.dataset.length) return;
+    shipFields.forEach((field) => {
+      field.dataset.free = 'false';
+      field.dataset.ship = this.dataset.ship;
+    });
+
     const shipToLoad = new Image();
     shipToLoad.src = `./images/${this.dataset.ship}.png`;
     shipToLoad.classList.add('shipToLoad');
@@ -83,14 +117,6 @@ function placeShip(board) {
     this.classList.add('inactive');
     this.removeEventListener('drag', showFreeFields);
     this.removeEventListener('dragend', dragend);
-    const places = board.placeShip(
-      element.dataset.x,
-      element.dataset.y,
-      this.dataset.ship
-    );
-    if (!places) return;
-
-    updateBoard(places, fields, this.dataset.ship);
   }
   ships.forEach((ship) => {
     ship.addEventListener('drag', showFreeFields);
