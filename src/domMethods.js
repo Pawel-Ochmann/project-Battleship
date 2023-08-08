@@ -45,7 +45,7 @@ function getShipFieldsVertical(length, x, y) {
   const shipFields = [];
   for (let i = 0; i < length; i++) {
     const field = document.querySelector(
-      `img[data-x=${x}][data-y=${+y + i}][data-free="true]`
+      `div[data-x='${x}'][data-y='${+y + i}'][data-free='true']`
     );
     if (field) shipFields.push(field);
   }
@@ -78,6 +78,9 @@ function placeShip() {
     icon.addEventListener('click', () => {
       const shipToRotate = icon.nextElementSibling;
       shipToRotate.classList.toggle('shipRotate');
+
+      const imageNextTo = icon.nextElementSibling;
+      imageNextTo.classList.toggle('horizontal');
     });
   });
 
@@ -88,6 +91,8 @@ function placeShip() {
       e.pageX - window.scrollX,
       e.pageY - window.scrollY
     );
+
+    console.log(element);
     if (!element.dataset.free) return;
 
     let shipFields = [];
@@ -113,13 +118,16 @@ function placeShip() {
     const shipToLoad = new Image();
     shipToLoad.src = `./images/${this.dataset.ship}.png`;
     shipToLoad.classList.add('shipToLoad');
+    if (!this.classList.contains('horizontal')) {
+      shipToLoad.classList.add('vertical');
+    }
     element.appendChild(shipToLoad);
     this.classList.add('inactive');
     this.removeEventListener('drag', showFreeFields);
     this.removeEventListener('dragend', dragend);
   }
   ships.forEach((ship) => {
-    ship.addEventListener('drag', showFreeFields);
+    ship.addEventListener('dragstart', showFreeFields);
     ship.addEventListener('dragend', dragend);
   });
 }
