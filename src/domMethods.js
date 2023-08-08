@@ -52,6 +52,34 @@ function getShipFieldsVertical(length, x, y) {
   return shipFields;
 }
 
+function markFalse(field) {
+  field.dataset.free = 'false';
+}
+
+function getFieldsAround(field) {
+  const x = field.dataset.x;
+  const y = field.dataset.y;
+  const fieldsAround = [
+    [x - 1, y - 1],
+    [x, y - 1],
+    [+x + 1, y - 1],
+    [x - 1, y],
+    [+x + 1, y],
+    [x - 1, +y + 1],
+    [x, +y + 1],
+    [+x + 1, +y + 1],
+  ];
+  const divsAround = [];
+  fieldsAround.forEach((field) => {
+    const div = document.querySelector(
+      `div[data-x='${field[0]}'][data-y='${field[1]}'][data-free='true']`
+    );
+    if (div) divsAround.push(div);
+  });
+  console.log(divsAround);
+  return divsAround;
+}
+
 function placeShip() {
   const ships = document.querySelectorAll('.fleet.player img');
 
@@ -92,7 +120,6 @@ function placeShip() {
       e.pageY - window.scrollY
     );
 
-    console.log(element);
     if (!element.dataset.free) return;
 
     let shipFields = [];
@@ -113,6 +140,9 @@ function placeShip() {
     shipFields.forEach((field) => {
       field.dataset.free = 'false';
       field.dataset.ship = this.dataset.ship;
+      getFieldsAround(field).forEach((el) => {
+        markFalse(el);
+      });
     });
 
     const shipToLoad = new Image();
