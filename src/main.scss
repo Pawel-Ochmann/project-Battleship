@@ -28,12 +28,12 @@ main {
   gap: 2rem;
   .boardContainer {
     display: flex;
-    gap:2rem;
+    gap: 2rem;
   }
   .fleet.player.player {
     display: grid;
-    gap:1rem;
-    grid-template-columns: repeat(3,1fr);
+    gap: 1rem;
+    grid-template-columns: repeat(3, 1fr);
   }
   .board {
     align-self: center;
@@ -84,4 +84,8 @@ i {
 }
 .fieldFree {
   background-color: rgba($color: green, $alpha: 0.3);
+}
+.fieldTaken {
+  background-color: rgba($color: red, $alpha: 0.3);
+  z-index: 100;
 }

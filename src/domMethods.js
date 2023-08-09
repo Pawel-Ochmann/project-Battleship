@@ -32,6 +32,7 @@ function appendBoards(board1, board2) {
 // }
 
 function getShipFieldsHorizontal(length, x, y) {
+  console.log(length, x, y);
   const shipFields = [];
   for (let i = 0; i < length; i++) {
     const field = document.querySelector(
@@ -76,7 +77,6 @@ function getFieldsAround(field) {
     );
     if (div) divsAround.push(div);
   });
-  console.log(divsAround);
   return divsAround;
 }
 
@@ -90,15 +90,28 @@ function placeShip() {
 
     return freeFields;
   }
+  function getTakenFields() {
+    const takenFields = document.querySelectorAll(
+      "div[data-free='false'][data-ship='false']"
+    );
+
+    return takenFields;
+  }
 
   function showFreeFields() {
     getFreeFields().forEach((field) => {
       field.classList.add('fieldFree');
     });
+    getTakenFields().forEach((field) => {
+      field.classList.add('fieldTaken');
+    });
   }
   function hideFreeFields() {
     getFreeFields().forEach((field) => {
       field.classList.remove('fieldFree');
+    });
+    getTakenFields().forEach((field) => {
+      field.classList.remove('fieldTaken');
     });
   }
 
@@ -162,4 +175,21 @@ function placeShip() {
   });
 }
 
-module.exports = { appendBoards, placeShip };
+function placeComputerShips() {
+  function randomOneToTen() {
+    return Math.floor(Math.random() * 10 + 1);
+  }
+  function randomFalseTrue() {
+    const outcome = Math.floor(Math.random() * 2);
+    return outcome === 1 ? true : false;
+  }
+
+  for (let i = 0; i < 100; i++) {
+    console.log(randomOneToTen());
+  }
+  for (let i = 0; i < 100; i++) {
+    console.log(randomFalseTrue());
+  }
+}
+
+module.exports = { appendBoards, placeShip, placeComputerShips };

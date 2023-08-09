@@ -9,6 +9,7 @@ function newGame() {
 
   domMethods.appendBoards(playerHuman.board, playerComputer.board);
   domMethods.placeShip(playerHuman);
+  domMethods.placeComputerShips();
 }
 
 newGame();
