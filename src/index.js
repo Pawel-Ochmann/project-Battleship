@@ -7,9 +7,9 @@ function newGame() {
   const playerHuman = logicMethods.createGameboard();
   const playerComputer = logicMethods.createGameboard();
 
-  domMethods.appendBoards(playerHuman.board, playerComputer.board);
+  domMethods.appendBoardPlayer(playerHuman.board);
+  domMethods.appendBoardComputer(playerComputer)
   domMethods.placeShip(playerHuman);
-  domMethods.placeComputerShips();
 }
 
 newGame();

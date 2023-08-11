@@ -1,8 +1,8 @@
 const playerBoard = document.querySelector('.player.board');
 const computerBoard = document.querySelector('.computer.board');
 
-function appendBoards(board1, board2) {
-  for (const field of board1) {
+function appendBoardPlayer(board) {
+  for (const field of board) {
     const box = document.createElement('div');
     box.dataset.x = field.x;
     box.dataset.y = field.y;
@@ -10,13 +10,57 @@ function appendBoards(board1, board2) {
     box.dataset.ship = false;
     playerBoard.appendChild(box);
   }
-  if (board2) {
-    for (const field of board2) {
-      const box = document.createElement('div');
-      box.dataset.x = field.x;
-      box.dataset.y = field.y;
-      computerBoard.appendChild(box);
-    }
+}
+
+function appendBoardComputer(player) {
+  function randomOneToTen() {
+    return Math.floor(Math.random() * 10 + 1);
+  }
+  function randomFalseTrue() {
+    const outcome = Math.floor(Math.random() * 2);
+    return outcome === 1 ? true : false;
+  }
+
+  function placeShipComputer(ship) {
+    console.log(ship);
+    let fields = [];
+    if (randomFalseTrue()) {
+      console.log(ship);
+      fields = getShipFieldsHorizontal(
+        ship.length,
+        randomOneToTen(),
+        randomOneToTen(),
+        'computer'
+      );
+    } else
+      fields = getShipFieldsVertical(
+        ship.length,
+        randomOneToTen(),
+        randomOneToTen(),
+        'computer'
+      );
+
+      if (fields.length < ship.length) {
+        fields = placeComputerShips(ship);
+      }
+      return fields;
+  }
+
+  for (const field of player.board) {
+    const box = document.createElement('div');
+    box.dataset.x = field.x;
+    box.dataset.y = field.y;
+    computerBoard.appendChild(box);
+  }
+
+  const ships = Object.entries(player.ships);
+  for (const ship of ships) {
+    let fields = placeShipComputer(ship[1]);
+    const fieldsAround = [];
+    fields.forEach((field)=> {
+      field.dataset.ship = ship[0];
+      fieldsAround.push(getFieldsAround(field));
+    })
   }
 }
 
@@ -31,22 +75,22 @@ function appendBoards(board1, board2) {
 //   return field;
 // }
 
-function getShipFieldsHorizontal(length, x, y) {
+function getShipFieldsHorizontal(length, x, y, player) {
   console.log(length, x, y);
   const shipFields = [];
   for (let i = 0; i < length; i++) {
     const field = document.querySelector(
-      `div[data-x='${+x + i}'][data-y='${y}'][data-free="true"]`
+      `div.${player} div[data-x='${+x + i}'][data-y='${y}'][data-free="true"]`
     );
     if (field) shipFields.push(field);
   }
   return shipFields;
 }
-function getShipFieldsVertical(length, x, y) {
+function getShipFieldsVertical(length, x, y, player) {
   const shipFields = [];
   for (let i = 0; i < length; i++) {
     const field = document.querySelector(
-      `div[data-x='${x}'][data-y='${+y + i}'][data-free='true']`
+      `div.${player} div[data-x='${x}'][data-y='${+y + i}'][data-free='true']`
     );
     if (field) shipFields.push(field);
   }
@@ -136,17 +180,22 @@ function placeShip() {
     if (!element.dataset.free) return;
 
     let shipFields = [];
+
+    console.log(this.dataset.length, element.dataset.x, element.dataset.y);
+
     if (this.classList.contains('horizontal')) {
       shipFields = getShipFieldsHorizontal(
         this.dataset.length,
         element.dataset.x,
-        element.dataset.y
+        element.dataset.y,
+        'player'
       );
     } else
       shipFields = getShipFieldsVertical(
         this.dataset.length,
         element.dataset.x,
-        element.dataset.y
+        element.dataset.y,
+        'player'
       );
 
     if (shipFields.length < this.dataset.length) return;
@@ -175,21 +224,10 @@ function placeShip() {
   });
 }
 
-function placeComputerShips() {
-  function randomOneToTen() {
-    return Math.floor(Math.random() * 10 + 1);
-  }
-  function randomFalseTrue() {
-    const outcome = Math.floor(Math.random() * 2);
-    return outcome === 1 ? true : false;
-  }
+function placeComputerShips() {}
 
-  for (let i = 0; i < 100; i++) {
-    console.log(randomOneToTen());
-  }
-  for (let i = 0; i < 100; i++) {
-    console.log(randomFalseTrue());
-  }
-}
-
-module.exports = { appendBoards, placeShip, placeComputerShips };
+module.exports = {
+  appendBoardPlayer,
+  appendBoardComputer,
+  placeShip,
+};
