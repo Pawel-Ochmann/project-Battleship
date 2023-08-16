@@ -22,10 +22,8 @@ function appendBoardComputer(player) {
   }
 
   function placeShipComputer(ship) {
-    console.log(ship);
     let fields = [];
     if (randomFalseTrue()) {
-      console.log(ship);
       fields = getShipFieldsHorizontal(
         ship.length,
         randomOneToTen(),
@@ -40,27 +38,32 @@ function appendBoardComputer(player) {
         'computer'
       );
 
-      if (fields.length < ship.length) {
-        fields = placeComputerShips(ship);
-      }
-      return fields;
+    if (fields.length < ship.length) {
+      fields = placeComputerShips(ship);
+    }
+    return fields;
   }
 
   for (const field of player.board) {
     const box = document.createElement('div');
     box.dataset.x = field.x;
     box.dataset.y = field.y;
+    box.dataset.free = true;
+    box.dataset.ship = false;
     computerBoard.appendChild(box);
   }
 
   const ships = Object.entries(player.ships);
   for (const ship of ships) {
     let fields = placeShipComputer(ship[1]);
+    fields.forEach((field) => {
+      field.classList.add('fieldComputer');
+    });
     const fieldsAround = [];
-    fields.forEach((field)=> {
+    fields.forEach((field) => {
       field.dataset.ship = ship[0];
       fieldsAround.push(getFieldsAround(field));
-    })
+    });
   }
 }
 
@@ -76,14 +79,15 @@ function appendBoardComputer(player) {
 // }
 
 function getShipFieldsHorizontal(length, x, y, player) {
-  console.log(length, x, y);
   const shipFields = [];
   for (let i = 0; i < length; i++) {
     const field = document.querySelector(
       `div.${player} div[data-x='${+x + i}'][data-y='${y}'][data-free="true"]`
     );
+
     if (field) shipFields.push(field);
   }
+
   return shipFields;
 }
 function getShipFieldsVertical(length, x, y, player) {
@@ -92,6 +96,7 @@ function getShipFieldsVertical(length, x, y, player) {
     const field = document.querySelector(
       `div.${player} div[data-x='${x}'][data-y='${+y + i}'][data-free='true']`
     );
+
     if (field) shipFields.push(field);
   }
   return shipFields;
@@ -223,8 +228,6 @@ function placeShip() {
     ship.addEventListener('dragend', dragend);
   });
 }
-
-function placeComputerShips() {}
 
 module.exports = {
   appendBoardPlayer,
