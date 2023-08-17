@@ -61,11 +61,10 @@ function appendBoardComputer(player) {
       field.dataset.ship = ship[0];
       field.dataset.free = false;
       const fieldsAround = getFieldsAround(field, 'computer');
-      fieldsAround.forEach((el)=> {
+      fieldsAround.forEach((el) => {
         el.dataset.free = false;
-        el.classList.add('fieldAround')
-      })
-      console.log(fieldsAround)
+        el.classList.add('fieldAround');
+      });
     });
   }
 }
@@ -132,10 +131,16 @@ function getFieldsAround(field, player) {
   return divsAround;
 }
 
-function placeShip() {
+function placeShip(computerBoard) {
   const ships = document.querySelectorAll('.fleet.player img');
 
   const rotateIcons = document.querySelectorAll('.fleet i');
+
+  function checkIfDone() {
+    const fleet = [...document.querySelectorAll('.fleet.player img')]
+    if (fleet.length > 0) return false;
+    else return true;
+  }
 
   function getFreeFields() {
     const freeFields = document.querySelectorAll("div[data-free='true']");
@@ -221,8 +226,8 @@ function placeShip() {
     }
     element.appendChild(shipToLoad);
     this.classList.add('inactive');
-    this.removeEventListener('drag', showFreeFields);
-    this.removeEventListener('dragend', dragend);
+    this.parentNode.remove();
+    if (checkIfDone()) appendBoardComputer(computerBoard);
   }
   ships.forEach((ship) => {
     ship.addEventListener('dragstart', showFreeFields);
@@ -232,6 +237,5 @@ function placeShip() {
 
 module.exports = {
   appendBoardPlayer,
-  appendBoardComputer,
   placeShip,
 };

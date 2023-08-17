@@ -32,8 +32,10 @@ main {
   }
   .fleet.player.player {
     display: grid;
-    gap: 1rem;
+    gap: 5rem 2rem;
     grid-template-columns: repeat(3, 1fr);
+    border: 2px solid black;
+    padding: 3rem;
   }
   .board {
     align-self: center;
