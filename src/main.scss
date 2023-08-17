@@ -51,7 +51,6 @@ main {
   }
 }
 .fleet img {
-  background-color: rgb(26, 81, 118);
   transition: 0.5s;
   cursor: pointer;
 }
@@ -89,7 +88,9 @@ i {
   background-color: rgba($color: red, $alpha: 0.3);
   z-index: 100;
 }
-
+.fieldAround {
+  background-color: rgba($color: rgb(20, 172, 33), $alpha: .3);
+}
 .fieldComputer {
   background-color: rgba($color: red, $alpha: 1);
 }

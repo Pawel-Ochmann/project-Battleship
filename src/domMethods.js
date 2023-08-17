@@ -39,7 +39,7 @@ function appendBoardComputer(player) {
       );
 
     if (fields.length < ship.length) {
-      fields = placeComputerShips(ship);
+      fields = placeShipComputer(ship);
     }
     return fields;
   }
@@ -58,11 +58,14 @@ function appendBoardComputer(player) {
     let fields = placeShipComputer(ship[1]);
     fields.forEach((field) => {
       field.classList.add('fieldComputer');
-    });
-    const fieldsAround = [];
-    fields.forEach((field) => {
       field.dataset.ship = ship[0];
-      fieldsAround.push(getFieldsAround(field));
+      field.dataset.free = false;
+      const fieldsAround = getFieldsAround(field, 'computer');
+      fieldsAround.forEach((el)=> {
+        el.dataset.free = false;
+        el.classList.add('fieldAround')
+      })
+      console.log(fieldsAround)
     });
   }
 }
@@ -106,7 +109,7 @@ function markFalse(field) {
   field.dataset.free = 'false';
 }
 
-function getFieldsAround(field) {
+function getFieldsAround(field, player) {
   const x = field.dataset.x;
   const y = field.dataset.y;
   const fieldsAround = [
@@ -122,7 +125,7 @@ function getFieldsAround(field) {
   const divsAround = [];
   fieldsAround.forEach((field) => {
     const div = document.querySelector(
-      `div[data-x='${field[0]}'][data-y='${field[1]}'][data-free='true']`
+      `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}'][data-free='true']`
     );
     if (div) divsAround.push(div);
   });
@@ -186,8 +189,6 @@ function placeShip() {
 
     let shipFields = [];
 
-    console.log(this.dataset.length, element.dataset.x, element.dataset.y);
-
     if (this.classList.contains('horizontal')) {
       shipFields = getShipFieldsHorizontal(
         this.dataset.length,
@@ -207,7 +208,7 @@ function placeShip() {
     shipFields.forEach((field) => {
       field.dataset.free = 'false';
       field.dataset.ship = this.dataset.ship;
-      getFieldsAround(field).forEach((el) => {
+      getFieldsAround(field, 'player').forEach((el) => {
         markFalse(el);
       });
     });
