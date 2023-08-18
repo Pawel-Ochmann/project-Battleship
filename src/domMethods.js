@@ -132,12 +132,15 @@ function getFieldsAround(field, player) {
 }
 
 function placeShip(computerBoard) {
+  appendBoardComputer(computerBoard);
+  appendStatsComputer();
+
   const ships = document.querySelectorAll('.fleet.player img');
 
   const rotateIcons = document.querySelectorAll('.fleet i');
 
   function checkIfDone() {
-    const fleet = [...document.querySelectorAll('.fleet.player img')]
+    const fleet = [...document.querySelectorAll('.fleet.player img')];
     if (fleet.length > 0) return false;
     else return true;
   }
@@ -233,6 +236,86 @@ function placeShip(computerBoard) {
     ship.addEventListener('dragstart', showFreeFields);
     ship.addEventListener('dragend', dragend);
   });
+}
+
+// create boards with stats
+
+function getStats(player) {
+  const fields = document.querySelectorAll(`div.${player}.board div`);
+  const fleet = [...fields].reduce(
+    (ships, field) => {
+      const ship = field.dataset.ship;
+      if (ship !== 'false') {
+        switch (ship) {
+          case 'boat1':
+          case 'boat2':
+          case 'boat3':
+          case 'boat4':
+            if (!ships.boats[ship]) {
+              ships.boats[ship] = 0;
+            }
+            ships.boats[ship]++;
+            break;
+
+          case 'destroyer1':
+          case 'destroyer2':
+          case 'destroyer3':
+            if (!ships.destroyers[ship]) {
+              ships.destroyers[ship] = 0;
+            }
+            ships.destroyers[ship]++;
+            break;
+
+          case 'submarine1':
+          case 'submarine2':
+            if (!ships.submarines[ship]) {
+              ships.submarines[ship] = 0;
+            }
+            ships.submarines[ship]++;
+            break;
+
+          case 'carrier':
+            if (!ships.carrier[ship]) {
+              ships.carrier[ship] = 0;
+            }
+            ships.carrier[ship]++;
+            break;
+
+          default:
+            // Handle unexpected ship types
+            break;
+        }
+      }
+      return ships;
+    },
+    { boats: {}, destroyers: {}, submarines: {}, carrier: {} }
+  );
+  return fleet;
+}
+
+function appendStatsPlayer() {}
+
+function appendStatsComputer() {
+  const statContainer = document.querySelector('.statsContainer');
+  const stats = getStats('computer');
+  console.log(stats)
+  const statField = document.createElement('div');
+  const title = document.createElement('h2');
+  title.textContent = 'Enemy Fleet:';
+  statField.appendChild(title);
+  const boatsStats = document.createElement('p');
+  boatsStats.textContent = `Boats: ${Object.keys(stats.boats).length}`;
+  statField.appendChild(boatsStats);
+  const destroyersStats = document.createElement('p');
+  destroyersStats.textContent = `Destroyers: ${Object.keys(stats.destroyers).length}`;
+  statField.appendChild(destroyersStats);
+  const submarinesStats = document.createElement('p');
+  submarinesStats.textContent = `Submarines: ${Object.keys(stats.submarines).length}`;
+  statField.appendChild(submarinesStats);
+  const carrierStats = document.createElement('p');
+  carrierStats.textContent = `Carrier: ${Object.keys(stats.carrier).length}`;
+  statField.appendChild(carrierStats);
+  statContainer.appendChild(statField);
 }
 
 module.exports = {
