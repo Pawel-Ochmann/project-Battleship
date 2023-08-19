@@ -1,5 +1,7 @@
 const playerBoard = document.querySelector('.player.board');
-const computerBoard = document.querySelector('.computer.board');
+const board = document.querySelector('.boardContainer');
+const computerBoardNode = document.createElement('div');
+computerBoardNode.classList.add('computer', 'board', 'hidden');
 
 function appendBoardPlayer(board) {
   for (const field of board) {
@@ -50,7 +52,7 @@ function appendBoardComputer(player) {
     box.dataset.y = field.y;
     box.dataset.free = true;
     box.dataset.ship = false;
-    computerBoard.appendChild(box);
+    computerBoardNode.appendChild(box);
   }
 
   const ships = Object.entries(player.ships);
@@ -132,9 +134,6 @@ function getFieldsAround(field, player) {
 }
 
 function placeShip(computerBoard) {
-  appendBoardComputer(computerBoard);
-  appendStatsComputer();
-
   const ships = document.querySelectorAll('.fleet.player img');
 
   const rotateIcons = document.querySelectorAll('.fleet i');
@@ -230,7 +229,16 @@ function placeShip(computerBoard) {
     element.appendChild(shipToLoad);
     this.classList.add('inactive');
     this.parentNode.remove();
-    if (checkIfDone()) appendBoardComputer(computerBoard);
+    if (checkIfDone()) {
+      console.log(computerBoardNode);
+      board.appendChild(computerBoardNode);
+      document.querySelector('div.fleet.player').classList.add('hidden');
+      appendBoardComputer(computerBoard);
+      computerBoardNode.classList.remove('hidden');
+      appendStats('player');
+      appendStats('computer');
+      document.querySelector('.statsContainer').classList.remove('hidden');
+    }
   }
   ships.forEach((ship) => {
     ship.addEventListener('dragstart', showFreeFields);
@@ -293,24 +301,25 @@ function getStats(player) {
   return fleet;
 }
 
-function appendStatsPlayer() {}
-
-function appendStatsComputer() {
+function appendStats(player) {
   const statContainer = document.querySelector('.statsContainer');
-  const stats = getStats('computer');
-  console.log(stats)
+  const stats = getStats(player);
   const statField = document.createElement('div');
   const title = document.createElement('h2');
-  title.textContent = 'Enemy Fleet:';
+  title.textContent = `${player}'s fleet: `;
   statField.appendChild(title);
   const boatsStats = document.createElement('p');
   boatsStats.textContent = `Boats: ${Object.keys(stats.boats).length}`;
   statField.appendChild(boatsStats);
   const destroyersStats = document.createElement('p');
-  destroyersStats.textContent = `Destroyers: ${Object.keys(stats.destroyers).length}`;
+  destroyersStats.textContent = `Destroyers: ${
+    Object.keys(stats.destroyers).length
+  }`;
   statField.appendChild(destroyersStats);
   const submarinesStats = document.createElement('p');
-  submarinesStats.textContent = `Submarines: ${Object.keys(stats.submarines).length}`;
+  submarinesStats.textContent = `Submarines: ${
+    Object.keys(stats.submarines).length
+  }`;
   statField.appendChild(submarinesStats);
   const carrierStats = document.createElement('p');
   carrierStats.textContent = `Carrier: ${Object.keys(stats.carrier).length}`;

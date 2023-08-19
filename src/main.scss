@@ -29,6 +29,7 @@ main {
   .boardContainer {
     display: flex;
     gap: 2rem;
+    justify-content: center;
   }
   .fleet.player.player {
     display: grid;
@@ -36,6 +37,7 @@ main {
     grid-template-columns: repeat(3, 1fr);
     border: 2px solid black;
     padding: 3rem;
+    transition: .5s;
   }
   .board {
     align-self: center;
@@ -43,6 +45,7 @@ main {
     grid-template-columns: repeat(10, 1fr);
     border: 1px solid black;
     background-image: url('./images/sea.jpg');
+    transition: .5s;
     div {
       position: relative;
       width: 50px;
@@ -91,8 +94,16 @@ i {
   z-index: 100;
 }
 .fieldAround {
-  background-color: rgba($color: rgb(20, 172, 33), $alpha: .3);
+  background-color: rgba($color: rgb(20, 172, 33), $alpha: 0.3);
 }
 .fieldComputer {
   background-color: rgba($color: red, $alpha: 1);
+}
+.statsContainer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  transition: .5s;
+}
+.hidden {
+  transform: scaleX(0);
 }
