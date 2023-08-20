@@ -52,6 +52,8 @@ function appendBoardComputer(player) {
     box.dataset.y = field.y;
     box.dataset.free = true;
     box.dataset.ship = false;
+    box.classList.add('fieldComputerHidden');
+    box.addEventListener('click', makeMovePlayer);
     computerBoardNode.appendChild(box);
   }
 
@@ -230,7 +232,6 @@ function placeShip(computerBoard) {
     this.classList.add('inactive');
     this.parentNode.remove();
     if (checkIfDone()) {
-      console.log(computerBoardNode);
       board.appendChild(computerBoardNode);
       document.querySelector('div.fleet.player').classList.add('hidden');
       appendBoardComputer(computerBoard);
@@ -325,6 +326,21 @@ function appendStats(player) {
   carrierStats.textContent = `Carrier: ${Object.keys(stats.carrier).length}`;
   statField.appendChild(carrierStats);
   statContainer.appendChild(statField);
+}
+
+function makeMovePlayer() {
+  this.removeEventListener('click', makeMovePlayer);
+  this.classList.remove('fieldComputerHidden');
+  if (this.dataset.ship !== 'false') {
+    this.classList.add('hitShip');
+  }
+  this.dataset.ship = false;
+  appendStats('player');
+  makeMoveComputer();
+}
+
+function makeMoveComputer() {
+  console.log('computer is making a move');
 }
 
 module.exports = {
