@@ -3,6 +3,14 @@ const board = document.querySelector('.boardContainer');
 const computerBoardNode = document.createElement('div');
 computerBoardNode.classList.add('computer', 'board', 'hidden');
 
+function randomOneToTen() {
+  return Math.floor(Math.random() * 10 + 1);
+}
+function randomFalseTrue() {
+  const outcome = Math.floor(Math.random() * 2);
+  return outcome === 1 ? true : false;
+}
+
 function appendBoardPlayer(board) {
   for (const field of board) {
     const box = document.createElement('div');
@@ -15,14 +23,6 @@ function appendBoardPlayer(board) {
 }
 
 function appendBoardComputer(player) {
-  function randomOneToTen() {
-    return Math.floor(Math.random() * 10 + 1);
-  }
-  function randomFalseTrue() {
-    const outcome = Math.floor(Math.random() * 2);
-    return outcome === 1 ? true : false;
-  }
-
   function placeShipComputer(ship) {
     let fields = [];
     if (randomFalseTrue()) {
@@ -335,12 +335,32 @@ function makeMovePlayer() {
     this.classList.add('hitShip');
   }
   this.dataset.ship = false;
-  appendStats('player');
   makeMoveComputer();
 }
 
 function makeMoveComputer() {
-  console.log('computer is making a move');
+  const x = randomOneToTen();
+  const y = randomOneToTen();
+  const fieldHit = document.querySelector(
+    `.board.player>div[data-x='${x}'][data-y='${y}']`
+  );
+  if (fieldHit.dataset.ship === 'hit') {
+    return makeMoveComputer();
+  } else if (fieldHit.dataset.ship === 'false') {
+    const image = new Image();
+    image.src = './images/miss.gif';
+    image.classList.add('imageForHit');
+    fieldHit.appendChild(image);
+  } else {
+    const image = new Image();
+    image.src = './images/fire.gif';
+    image.classList.add('imageForHit');
+    fieldHit.appendChild(image);
+  }
+  fieldHit.dataset.ship = 'hit';
+  document.querySelector('.statsContainer').textContent = '';
+  appendStats('player');
+  appendStats('computer');
 }
 
 module.exports = {
