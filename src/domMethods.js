@@ -310,20 +310,24 @@ function appendStats(player) {
   title.textContent = `${player}'s fleet: `;
   statField.appendChild(title);
   const boatsStats = document.createElement('p');
+  boatsStats.classList.add(`${player}`);
   boatsStats.textContent = `Boats: ${Object.keys(stats.boats).length}`;
   statField.appendChild(boatsStats);
   const destroyersStats = document.createElement('p');
+  destroyersStats.classList.add(`${player}`);
   destroyersStats.textContent = `Destroyers: ${
     Object.keys(stats.destroyers).length
   }`;
   statField.appendChild(destroyersStats);
   const submarinesStats = document.createElement('p');
+  submarinesStats.classList.add(`${player}`);
   submarinesStats.textContent = `Submarines: ${
     Object.keys(stats.submarines).length
   }`;
   statField.appendChild(submarinesStats);
   const carrierStats = document.createElement('p');
   carrierStats.textContent = `Carrier: ${Object.keys(stats.carrier).length}`;
+  carrierStats.classList.add(`${player}`);
   statField.appendChild(carrierStats);
   statContainer.appendChild(statField);
 }
@@ -339,6 +343,7 @@ function makeMovePlayer() {
 }
 
 function makeMoveComputer() {
+  checkFieldHit();
   const x = randomOneToTen();
   const y = randomOneToTen();
   const fieldHit = document.querySelector(
@@ -356,11 +361,29 @@ function makeMoveComputer() {
     image.src = './images/fire.gif';
     image.classList.add('imageForHit');
     fieldHit.appendChild(image);
+    fieldHit.dataset.lasthit = true;
   }
   fieldHit.dataset.ship = 'hit';
+  const fleetCountPrev = shipsCount('player');
   document.querySelector('.statsContainer').textContent = '';
   appendStats('player');
   appendStats('computer');
+  const fleetCountAfter = shipsCount('player');
+  if (fleetCountPrev !== fleetCountAfter) fieldHit.dataset.lasthit = false;
+}
+
+function shipsCount(player) {
+  let ships = document.querySelectorAll(`p.${player}`);
+  const shipsCounted = [...ships].reduce((sum, ship) => {
+    const text = +ship.textContent[ship.textContent.length - 1];
+    return sum + text;
+  }, 0);
+  return shipsCounted;
+}
+
+function checkFieldHit() {
+  const fieldHit = document.querySelector("div.player.board>div[data-lasthit='true']");
+  console.log(fieldHit);
 }
 
 module.exports = {
