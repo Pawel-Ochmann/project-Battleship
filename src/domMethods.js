@@ -343,12 +343,66 @@ function makeMovePlayer() {
 }
 
 function makeMoveComputer() {
-  checkFieldHit();
-  const x = randomOneToTen();
-  const y = randomOneToTen();
-  const fieldHit = document.querySelector(
-    `.board.player>div[data-x='${x}'][data-y='${y}']`
-  );
+  const lastFields = [...checkFieldHit()];
+  let fieldHit = null;
+  if (lastFields.length === 1) {
+    const divsAround = [];
+
+    const x = lastFields[0].dataset.x;
+    const y = lastFields[0].dataset.y;
+    const fieldsAround = [
+      [x, y - 1],
+      [x - 1, y],
+      [+x + 1, y],
+      [x, +y + 1],
+    ];
+    fieldsAround.forEach((field) => {
+      const div = document.querySelector(
+        `div.player div[data-x='${field[0]}'][data-y='${field[1]}']`
+      );
+      if (div) divsAround.push(div);
+    });
+    fieldHit = divsAround[Math.floor(Math.random() * divsAround.length)];
+  } else if (lastFields.length > 1) {
+    const horizontal = (lastFields[0].dataset.x - lastFields[1].dataset.x) * -1;
+    const vertical = (lastFields[0].dataset.y - lastFields[1].dataset.y) * -1;
+
+    //case ship is positione horizontally
+    if (horizontal === 1) {
+      const before =
+        Math.floor((lastFields[0].dataset.x + lastFields[1].dataset.x) / 2) - 1;
+      const after =
+        Math.ceil((lastFields[0].dataset.x + lastFields[1].dataset.x) / 2) + 1;
+      const fieldBefore = document.querySelector(
+        `.board.player>div[data-x='${before}'][data-y='${lastFields[0].dataset.y}']`
+      );
+      const fieldAfter = document.querySelector(
+        `.board.player>div[data-x='${after}'][data-y='${lastFields[0].dataset.y}']`
+      );
+      fieldHit = fieldBefore || fieldAfter;
+    }
+    //case ship is positioned vertically
+    else {
+      const before =
+        Math.floor((lastFields[0].dataset.y + lastFields[1].dataset.y) / 2) - 1;
+      const after =
+        Math.ceil((lastFields[0].dataset.y + lastFields[1].dataset.y) / 2) + 1;
+      const fieldBefore = document.querySelector(
+        `.board.player>div[data-x='${lastFields[0].dataset.x}'][data-y='${before}']`
+      );
+      const fieldAfter = document.querySelector(
+        `.board.player>div[data-x='${lastFields[0].dataset.x}'][data-y='${after}']`
+      );
+      fieldHit = fieldBefore || fieldAfter;
+    }
+  } else {
+    const x = randomOneToTen();
+    const y = randomOneToTen();
+    fieldHit = document.querySelector(
+      `.board.player>div[data-x='${x}'][data-y='${y}']`
+    );
+  }
+
   if (fieldHit.dataset.ship === 'hit') {
     return makeMoveComputer();
   } else if (fieldHit.dataset.ship === 'false') {
@@ -369,7 +423,7 @@ function makeMoveComputer() {
   appendStats('player');
   appendStats('computer');
   const fleetCountAfter = shipsCount('player');
-  if (fleetCountPrev !== fleetCountAfter) fieldHit.dataset.lasthit = false;
+  if (fleetCountPrev !== fleetCountAfter) clearLastHit();
 }
 
 function shipsCount(player) {
@@ -382,8 +436,18 @@ function shipsCount(player) {
 }
 
 function checkFieldHit() {
-  const fieldHit = document.querySelector("div.player.board>div[data-lasthit='true']");
-  console.log(fieldHit);
+  const fieldHit = document.querySelectorAll(
+    "div.player.board>div[data-lasthit='true']"
+  );
+  return fieldHit;
+}
+
+function clearLastHit() {
+  document
+    .querySelectorAll("div.player.board>div[data-lasthit='true']")
+    .forEach((field) => {
+      field.dataset.lasthit = false;
+    });
 }
 
 module.exports = {
