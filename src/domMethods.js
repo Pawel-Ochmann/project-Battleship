@@ -363,35 +363,63 @@ function makeMoveComputer() {
       if (div) divsAround.push(div);
     });
     fieldHit = divsAround[Math.floor(Math.random() * divsAround.length)];
+  } else if (lastFields.length === 3) {
+    fieldHit = document.querySelector(
+      "div.player.board>div[data-ship='carrier']"
+    );
   } else if (lastFields.length > 1) {
     const horizontal = (lastFields[0].dataset.x - lastFields[1].dataset.x) * -1;
-    const vertical = (lastFields[0].dataset.y - lastFields[1].dataset.y) * -1;
 
     //case ship is positione horizontally
     if (horizontal === 1) {
       const before =
-        Math.floor((lastFields[0].dataset.x + lastFields[1].dataset.x) / 2) - 1;
+        Math.floor(
+          (parseInt(lastFields[0].dataset.x) +
+            parseInt(lastFields[1].dataset.x)) /
+            2
+        ) - 1;
       const after =
-        Math.ceil((lastFields[0].dataset.x + lastFields[1].dataset.x) / 2) + 1;
+        Math.ceil(
+          (parseInt(lastFields[0].dataset.x) +
+            parseInt(lastFields[1].dataset.x)) /
+            2
+        ) + 1;
       const fieldBefore = document.querySelector(
         `.board.player>div[data-x='${before}'][data-y='${lastFields[0].dataset.y}']`
       );
       const fieldAfter = document.querySelector(
         `.board.player>div[data-x='${after}'][data-y='${lastFields[0].dataset.y}']`
       );
-      fieldHit = fieldBefore || fieldAfter;
+      const divsToMatch = [];
+      if (fieldBefore) {
+        divsToMatch.push(fieldBefore);
+      }
+      if (fieldAfter) {
+        divsToMatch.push(fieldAfter);
+      }
+      fieldHit = divsToMatch[Math.floor(Math.random() * divsToMatch.length)];
     }
     //case ship is positioned vertically
     else {
       const before =
-        Math.floor((lastFields[0].dataset.y + lastFields[1].dataset.y) / 2) - 1;
+        Math.floor(
+          (parseInt(lastFields[0].dataset.y) +
+            parseInt(lastFields[1].dataset.y)) /
+            2
+        ) - 1;
       const after =
-        Math.ceil((lastFields[0].dataset.y + lastFields[1].dataset.y) / 2) + 1;
+        Math.ceil(
+          (parseInt(lastFields[0].dataset.y) +
+            parseInt(lastFields[1].dataset.y)) /
+            2
+        ) + 1;
       const fieldBefore = document.querySelector(
-        `.board.player>div[data-x='${lastFields[0].dataset.x}'][data-y='${before}']`
+        `.board.player>div[data-x='${+lastFields[0].dataset
+          .x}'][data-y='${before}']`
       );
       const fieldAfter = document.querySelector(
-        `.board.player>div[data-x='${lastFields[0].dataset.x}'][data-y='${after}']`
+        `.board.player>div[data-x='${+lastFields[0].dataset
+          .x}'][data-y='${after}']`
       );
       fieldHit = fieldBefore || fieldAfter;
     }
@@ -448,6 +476,41 @@ function clearLastHit() {
     .forEach((field) => {
       field.dataset.lasthit = false;
     });
+}
+
+function getFieldsAroundHits() {
+  const hitsPlayer = document.querySelectorAll('.imageForHit');
+  const hitsEnemy = document.querySelectorAll('.hitShip');
+  const fieldsPlayer = [];
+  const fieldsEnemy = []
+  hitsPlayer.forEach((field)=> {
+    fieldsPlayer.push(field.parentElement);
+  });
+  hitsEnemy.forEach((field)=> {
+    fieldsEnemy.push(field.parentElement);
+  })
+  function getAround(field, player) {
+      const x = field.dataset.x;
+      const y = field.dataset.y;
+      const fieldsAround = [
+        [x - 1, y - 1],
+        [x, y - 1],
+        [+x + 1, y - 1],
+        [x - 1, y],
+        [+x + 1, y],
+        [x - 1, +y + 1],
+        [x, +y + 1],
+        [+x + 1, +y + 1],
+      ];
+      const divsAround = [];
+      fieldsAround.forEach((field) => {
+        const div = document.querySelector(
+          `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}'][data-free='true']`
+        );
+        if (div) divsAround.push(div);
+      });
+      return divsAround;
+  }
 }
 
 module.exports = {

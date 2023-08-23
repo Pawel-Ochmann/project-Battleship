@@ -122,3 +122,7 @@ img.imageForHit {
   height: 50px;
   z-index: 100;
 }
+
+.fieldsAroundHits {
+  background-color: rgba($color: red, $alpha: 1.0);
+}
