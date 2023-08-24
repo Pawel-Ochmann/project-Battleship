@@ -516,20 +516,38 @@ function getFieldsAroundHits(player) {
       [x, +y + 1],
       [+x + 1, +y + 1],
     ];
-    const divsAround = [];
-    fieldsAround.forEach((field) => {
+    let divsAround = [];
+
+    for (const field of fieldsAround) {
       const div = document.querySelector(
         `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}']`
       );
-      if (div && div.dataset.ship === 'false') divsAround.push(div);
-    });
- 
+
+      if (div && div.dataset.ship !== 'false' && div.dataset.ship !== 'hit') {
+        divsAround = false;
+        break;
+      }
+
+      if (div && div.dataset.ship === 'false') {
+        divsAround.push(div);
+      }
+    }
+
+    // fieldsAround.forEach((field) => {
+    //   const div = document.querySelector(
+    //     `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}']`
+    //   );
+    //   if (div && div.dataset.ship === 'false') divsAround.push(div);
+    // });
+
     return divsAround;
   }
 
   const fieldsAround = [];
   hitsPlayer.forEach((field) => {
-    fieldsAround.push(...getAround(field, player));
+    if (getAround(field, player)) {
+      fieldsAround.push(...getAround(field, player));
+    }
   });
 
   return fieldsAround;
