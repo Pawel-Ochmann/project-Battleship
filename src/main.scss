@@ -14,6 +14,7 @@ body {
   flex-direction: column;
   text-align: center;
   justify-items: center;
+  background-image: url(./images/background.jpg);
 }
 
 header h1 {
@@ -34,11 +35,14 @@ main {
   }
   .fleet.player.player {
     display: grid;
-    gap: 5rem 2rem;
-    grid-template-columns: repeat(3, 1fr);
+    gap:2rem 0rem;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr;
     border: 2px solid black;
-    padding: 3rem;
+    padding: 1rem 1rem;
     transition: 0.5s;
+    i {
+      margin:2rem 1rem 2rem 0 ;
+    }
   }
   .board {
     align-self: center;
@@ -125,5 +129,11 @@ img.imageForHit, img.imageForMiss {
 }
 
 .fieldsAroundHits {
-  background-color: rgba($color: red, $alpha: 1.0);
+    background-image: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 8px,
+    red 5px,
+    red 15px
+  );
 }

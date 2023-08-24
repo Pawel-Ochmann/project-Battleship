@@ -498,7 +498,6 @@ function getFieldsAroundHits(player) {
   let hitsPlayer = [];
   if (player === 'player') {
     document.querySelectorAll('.imageForHit').forEach((field) => {
-      console.log(field.parentElement);
       hitsPlayer.push(field.parentElement);
     });
   } else hitsPlayer = document.querySelectorAll('.hitShip');
