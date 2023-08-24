@@ -338,7 +338,18 @@ function makeMovePlayer() {
   if (this.dataset.ship !== 'false') {
     this.classList.add('hitShip');
   }
-  this.dataset.ship = false;
+  this.dataset.ship = 'hit';
+
+  const fleetCountPrev = shipsCount('computer');
+  document.querySelector('.statsContainer').textContent = '';
+  appendStats('player');
+  appendStats('computer');
+  const fleetCountAfter = shipsCount('computer');
+  if (fleetCountPrev !== fleetCountAfter) {
+    getFieldsAroundHits('computer').forEach((field) => {
+      field.classList.add('fieldsAroundHits');
+    });
+  }
   makeMoveComputer();
 }
 
@@ -436,7 +447,7 @@ function makeMoveComputer() {
   } else if (fieldHit.dataset.ship === 'false') {
     const image = new Image();
     image.src = './images/miss.gif';
-    image.classList.add('imageForHit');
+    image.classList.add('imageForMiss');
     fieldHit.appendChild(image);
   } else {
     const image = new Image();
@@ -451,7 +462,12 @@ function makeMoveComputer() {
   appendStats('player');
   appendStats('computer');
   const fleetCountAfter = shipsCount('player');
-  if (fleetCountPrev !== fleetCountAfter) clearLastHit();
+  if (fleetCountPrev !== fleetCountAfter) {
+    clearLastHit();
+    getFieldsAroundHits('player').forEach((field) => {
+      field.classList.add('fieldsAroundHits');
+    });
+  }
 }
 
 function shipsCount(player) {
@@ -478,39 +494,45 @@ function clearLastHit() {
     });
 }
 
-function getFieldsAroundHits() {
-  const hitsPlayer = document.querySelectorAll('.imageForHit');
-  const hitsEnemy = document.querySelectorAll('.hitShip');
-  const fieldsPlayer = [];
-  const fieldsEnemy = []
-  hitsPlayer.forEach((field)=> {
-    fieldsPlayer.push(field.parentElement);
-  });
-  hitsEnemy.forEach((field)=> {
-    fieldsEnemy.push(field.parentElement);
-  })
+function getFieldsAroundHits(player) {
+  let hitsPlayer = [];
+  if (player === 'player') {
+    document.querySelectorAll('.imageForHit').forEach((field) => {
+      console.log(field.parentElement);
+      hitsPlayer.push(field.parentElement);
+    });
+  } else hitsPlayer = document.querySelectorAll('.hitShip');
+
   function getAround(field, player) {
-      const x = field.dataset.x;
-      const y = field.dataset.y;
-      const fieldsAround = [
-        [x - 1, y - 1],
-        [x, y - 1],
-        [+x + 1, y - 1],
-        [x - 1, y],
-        [+x + 1, y],
-        [x - 1, +y + 1],
-        [x, +y + 1],
-        [+x + 1, +y + 1],
-      ];
-      const divsAround = [];
-      fieldsAround.forEach((field) => {
-        const div = document.querySelector(
-          `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}'][data-free='true']`
-        );
-        if (div) divsAround.push(div);
-      });
-      return divsAround;
+    const x = field.dataset.x;
+    const y = field.dataset.y;
+    const fieldsAround = [
+      [x - 1, y - 1],
+      [x, y - 1],
+      [+x + 1, y - 1],
+      [x - 1, y],
+      [+x + 1, y],
+      [x - 1, +y + 1],
+      [x, +y + 1],
+      [+x + 1, +y + 1],
+    ];
+    const divsAround = [];
+    fieldsAround.forEach((field) => {
+      const div = document.querySelector(
+        `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}']`
+      );
+      if (div && div.dataset.ship === 'false') divsAround.push(div);
+    });
+ 
+    return divsAround;
   }
+
+  const fieldsAround = [];
+  hitsPlayer.forEach((field) => {
+    fieldsAround.push(...getAround(field, player));
+  });
+
+  return fieldsAround;
 }
 
 module.exports = {
