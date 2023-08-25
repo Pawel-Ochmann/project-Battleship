@@ -3,6 +3,29 @@ const board = document.querySelector('.boardContainer');
 const computerBoardNode = document.createElement('div');
 computerBoardNode.classList.add('computer', 'board', 'hidden');
 
+const audio = (function() {
+  const missAudio = document.querySelector('#miss');
+  const scoreAudio = document.querySelector('#score');
+  const shotAudio = document.querySelector('#shot');
+  const sinkAudio = document.querySelector('#sink');
+
+  return {
+    miss: function () {
+      missAudio.play();
+    },
+    score: function () {
+      scoreAudio.play();
+    },
+    shot: function () {
+      shotAudio.play();
+    },
+    sink: function () {
+      sinkAudio.play();
+    },
+  };
+})();
+
+console.log(audio);
 function randomOneToTen() {
   return Math.floor(Math.random() * 10 + 1);
 }
@@ -346,6 +369,9 @@ function makeMovePlayer() {
   this.classList.remove('fieldComputerHidden');
   if (this.dataset.ship !== 'false') {
     this.classList.add('hitShip');
+    audio.shot();
+  } else {
+    audio.miss();
   }
   this.dataset.ship = 'hit';
 
@@ -355,6 +381,7 @@ function makeMovePlayer() {
   appendStats('computer');
   const fleetCountAfter = shipsCount('computer');
   if (fleetCountPrev !== fleetCountAfter) {
+    audio.score();
     getFieldsAroundHits('computer').forEach((field) => {
       field.classList.add('fieldsAroundHits2');
       field.removeEventListener('click', makeMovePlayer);
@@ -456,6 +483,7 @@ function makeMoveComputer() {
   if (fieldHit.dataset.ship === 'hit') {
     return makeMoveComputer();
   } else if (fieldHit.dataset.ship === 'false') {
+    audio.miss();
     const image = new Image();
     image.src = './images/miss.gif';
     image.classList.add('imageForMiss');
@@ -466,6 +494,7 @@ function makeMoveComputer() {
     image.classList.add('imageForHit');
     fieldHit.appendChild(image);
     fieldHit.dataset.lasthit = true;
+    audio.shot();
   }
   fieldHit.dataset.ship = 'hit';
   const fleetCountPrev = shipsCount('player');
@@ -474,6 +503,7 @@ function makeMoveComputer() {
   appendStats('computer');
   const fleetCountAfter = shipsCount('player');
   if (fleetCountPrev !== fleetCountAfter) {
+    audio.sink();
     clearLastHit();
     getFieldsAroundHits('player').forEach((field) => {
       field.classList.add('fieldsAroundHits');
