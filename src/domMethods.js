@@ -239,6 +239,15 @@ function placeShip(computerBoard) {
       appendStats('player');
       appendStats('computer');
       document.querySelector('.statsContainer').classList.remove('hidden');
+      const header = document.querySelector('header');
+      header.textContent = '';
+      const newHeader = document.createElement('h1');
+      newHeader.textContent = 'Destroy Enemy Fleet!';
+      const headerP = document.createElement('p');
+      headerP.textContent =
+        'Chose field on enemy board and click to shoot on it.';
+      header.appendChild(newHeader);
+      header.appendChild(headerP);
     }
   }
   ships.forEach((ship) => {
@@ -347,7 +356,9 @@ function makeMovePlayer() {
   const fleetCountAfter = shipsCount('computer');
   if (fleetCountPrev !== fleetCountAfter) {
     getFieldsAroundHits('computer').forEach((field) => {
-      field.classList.add('fieldsAroundHits');
+      field.classList.add('fieldsAroundHits2');
+      field.removeEventListener('click', makeMovePlayer);
+      field.classList.remove('fieldComputerHidden');
     });
   }
   makeMoveComputer();
@@ -466,6 +477,7 @@ function makeMoveComputer() {
     clearLastHit();
     getFieldsAroundHits('player').forEach((field) => {
       field.classList.add('fieldsAroundHits');
+      field.dataset.ship = 'hit';
     });
   }
 }
@@ -531,14 +543,6 @@ function getFieldsAroundHits(player) {
         divsAround.push(div);
       }
     }
-
-    // fieldsAround.forEach((field) => {
-    //   const div = document.querySelector(
-    //     `div.${player} div[data-x='${field[0]}'][data-y='${field[1]}']`
-    //   );
-    //   if (div && div.dataset.ship === 'false') divsAround.push(div);
-    // });
-
     return divsAround;
   }
 
