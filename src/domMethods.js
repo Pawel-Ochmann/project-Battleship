@@ -3,29 +3,39 @@ const board = document.querySelector('.boardContainer');
 const computerBoardNode = document.createElement('div');
 computerBoardNode.classList.add('computer', 'board', 'hidden');
 
-const audio = (function() {
+const audio = (function () {
   const missAudio = document.querySelector('#miss');
   const scoreAudio = document.querySelector('#score');
   const shotAudio = document.querySelector('#shot');
   const sinkAudio = document.querySelector('#sink');
 
+  function clear() {
+    missAudio.currentTime = 0;
+    scoreAudio.currentTime = 0;
+    shotAudio.currentTime = 0;
+    sinkAudio.currentTime = 0;
+  }
+
   return {
     miss: function () {
+      clear();
       missAudio.play();
     },
     score: function () {
+      clear();
       scoreAudio.play();
     },
     shot: function () {
+      clear();
       shotAudio.play();
     },
     sink: function () {
+      clear();
       sinkAudio.play();
     },
   };
 })();
 
-console.log(audio);
 function randomOneToTen() {
   return Math.floor(Math.random() * 10 + 1);
 }
@@ -365,13 +375,14 @@ function appendStats(player) {
 }
 
 function makeMovePlayer() {
+  if (board.classList.contains('block')) return;
   this.removeEventListener('click', makeMovePlayer);
   this.classList.remove('fieldComputerHidden');
   if (this.dataset.ship !== 'false') {
     this.classList.add('hitShip');
-    audio.shot();
+    // audio.shot();
   } else {
-    audio.miss();
+    // audio.miss();
   }
   this.dataset.ship = 'hit';
 
@@ -380,14 +391,17 @@ function makeMovePlayer() {
   appendStats('player');
   appendStats('computer');
   const fleetCountAfter = shipsCount('computer');
+  if (fleetCountAfter === 0) {
+    return winGame();
+  }
   if (fleetCountPrev !== fleetCountAfter) {
-    audio.score();
     getFieldsAroundHits('computer').forEach((field) => {
       field.classList.add('fieldsAroundHits2');
       field.removeEventListener('click', makeMovePlayer);
       field.classList.remove('fieldComputerHidden');
     });
   }
+  board.classList.add('block');
   makeMoveComputer();
 }
 
@@ -483,7 +497,7 @@ function makeMoveComputer() {
   if (fieldHit.dataset.ship === 'hit') {
     return makeMoveComputer();
   } else if (fieldHit.dataset.ship === 'false') {
-    audio.miss();
+    // audio.miss();
     const image = new Image();
     image.src = './images/miss.gif';
     image.classList.add('imageForMiss');
@@ -494,7 +508,7 @@ function makeMoveComputer() {
     image.classList.add('imageForHit');
     fieldHit.appendChild(image);
     fieldHit.dataset.lasthit = true;
-    audio.shot();
+    // audio.shot();
   }
   fieldHit.dataset.ship = 'hit';
   const fleetCountPrev = shipsCount('player');
@@ -502,14 +516,17 @@ function makeMoveComputer() {
   appendStats('player');
   appendStats('computer');
   const fleetCountAfter = shipsCount('player');
+  if (fleetCountAfter === 0) {
+    return loseGame();
+  }
   if (fleetCountPrev !== fleetCountAfter) {
-    audio.sink();
     clearLastHit();
     getFieldsAroundHits('player').forEach((field) => {
       field.classList.add('fieldsAroundHits');
       field.dataset.ship = 'hit';
     });
   }
+  board.classList.remove('block');
 }
 
 function shipsCount(player) {
@@ -585,6 +602,70 @@ function getFieldsAroundHits(player) {
 
   return fieldsAround;
 }
+
+function winGame() {
+  const header = document.querySelector('header');
+  header.textContent = '';
+  const winTitle = document.createElement('h1');
+  winTitle.textContent = 'YOU WON!';
+  header.appendChild(winTitle);
+
+  const main = document.querySelector('main');
+  main.textContent = '';
+  const winBox = document.createElement('div');
+  winBox.classList.add('box');
+  main.appendChild(winBox);
+
+  const reloadButton = document.createElement('button');
+  reloadButton.textContent = 'Play again';
+  main.appendChild(reloadButton);
+  reloadButton.addEventListener('click', () => {
+    location.reload();
+  });
+  main.appendChild(loadGif('win'));
+}
+
+function loseGame() {
+  const header = document.querySelector('header');
+  header.textContent = '';
+  const loseTitle = document.createElement('h1');
+  loseTitle.textContent = 'YOU LOSE!';
+  header.appendChild(loseTitle);
+
+  const main = document.querySelector('main');
+  main.textContent = '';
+  const loseBox = document.createElement('div');
+  loseBox.classList.add('box');
+  main.appendChild(loseBox);
+
+  const reloadButton = document.createElement('button');
+  reloadButton.textContent = 'Play again';
+  main.appendChild(reloadButton);
+  reloadButton.addEventListener('click', () => {
+    location.reload();
+  });
+  main.appendChild(loadGif('lose'));
+}
+
+function loadGif(phrase) {
+  const image = new Image();
+  image.classList.add('box');
+  fetch(
+    `https://api.giphy.com/v1/gifs/translate?api_key=yj95txvwzdxGDuFA4J2CeomczmxZRQ1D&s=${phrase}`,
+    {
+      mode: 'cors',
+    }
+  )
+    .then((response) => {
+      return response.json();
+    })
+    .then((response) => {
+      image.src = response.data.images.original.url;
+    });
+  return image;
+}
+
+loseGame();
 
 module.exports = {
   appendBoardPlayer,

@@ -38,6 +38,10 @@ main {
     justify-content: center;
   }
   .fleet.player.player {
+    max-width: 1400px;
+    min-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
     display: grid;
     gap: 2rem 0rem;
     grid-template-columns: 1fr 1fr 1fr 1fr 1.5fr;
@@ -170,4 +174,28 @@ img.imageForMiss {
     rgba(0, 161, 27, 0.527) 5px,
     rgba(0, 158, 0, 0.568) 15px
   );
+}
+
+.box {
+  width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+main > button {
+  margin-left: auto;
+  margin-right: auto;
+  text-transform: uppercase;
+  font-size: 1.5rem;
+  width: 12rem;
+  height: 3rem;
+  font-weight: bold;
+  border: 2px solid green;
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    background-color: rgba($color: #000000, $alpha: 0.3);
+  }
 }
