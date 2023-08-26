@@ -203,3 +203,7 @@ main > button {
 .board {
   filter: brightness(0.5);
 }
+
+.board.computer>div {
+  cursor:url(./images/cursor.png) 25 25, crosshair;
+}

@@ -404,7 +404,7 @@ function makeMovePlayer() {
     });
   }
   board.classList.add('block');
-  setTimeout(makeMoveComputer, 1500);
+  setTimeout(makeMoveComputer, 1000);
 }
 
 function makeMoveComputer() {
@@ -530,7 +530,7 @@ function makeMoveComputer() {
   }
   setTimeout(() => {
     board.classList.remove('block');
-  }, 1500);
+  }, 1000);
 }
 
 function shipsCount(player) {
@@ -668,6 +668,7 @@ function loadGif(phrase) {
     });
   return image;
 }
+
 
 module.exports = {
   appendBoardPlayer,
