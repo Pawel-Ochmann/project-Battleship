@@ -253,6 +253,7 @@ function placeShip(computerBoard) {
       getFieldsAround(field, 'player').forEach((el) => {
         markFalse(el);
       });
+      audio.score();
     });
 
     const shipToLoad = new Image();
@@ -376,13 +377,14 @@ function appendStats(player) {
 
 function makeMovePlayer() {
   if (board.classList.contains('block')) return;
+  board.classList.add('block');
   this.removeEventListener('click', makeMovePlayer);
   this.classList.remove('fieldComputerHidden');
   if (this.dataset.ship !== 'false') {
     this.classList.add('hitShip');
-    // audio.shot();
+    audio.shot();
   } else {
-    // audio.miss();
+    audio.miss();
   }
   this.dataset.ship = 'hit';
 
@@ -402,7 +404,7 @@ function makeMovePlayer() {
     });
   }
   board.classList.add('block');
-  makeMoveComputer();
+  setTimeout(makeMoveComputer, 1500);
 }
 
 function makeMoveComputer() {
@@ -497,18 +499,18 @@ function makeMoveComputer() {
   if (fieldHit.dataset.ship === 'hit') {
     return makeMoveComputer();
   } else if (fieldHit.dataset.ship === 'false') {
-    // audio.miss();
     const image = new Image();
     image.src = './images/miss.gif';
     image.classList.add('imageForMiss');
     fieldHit.appendChild(image);
+    audio.miss();
   } else {
     const image = new Image();
     image.src = './images/fire.gif';
     image.classList.add('imageForHit');
     fieldHit.appendChild(image);
     fieldHit.dataset.lasthit = true;
-    // audio.shot();
+    audio.shot();
   }
   fieldHit.dataset.ship = 'hit';
   const fleetCountPrev = shipsCount('player');
@@ -526,7 +528,9 @@ function makeMoveComputer() {
       field.dataset.ship = 'hit';
     });
   }
-  board.classList.remove('block');
+  setTimeout(() => {
+    board.classList.remove('block');
+  }, 1500);
 }
 
 function shipsCount(player) {
@@ -664,8 +668,6 @@ function loadGif(phrase) {
     });
   return image;
 }
-
-loseGame();
 
 module.exports = {
   appendBoardPlayer,
