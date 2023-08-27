@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  <script defer src="main.js"></script></head>
+  <body>
+    <div class="cannon cannonHidden">
+      <img src="./images/gunLoading.png" alt="" />
+    </div>
+    <header>
+      <h1>Place Your Fleet!</h1>
+      <p>You can drag and drop ships with your mouse.</p>
+    </header>
+    <main>
+      <div class="fleet player">
+        <div>
+          <h3>Boat 1</h3>
+          <img
+            data-length="1"
+            data-ship="boat1"
+            src="./images/boat1.png"
+            width="50"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Boat 2</h3>
+          <img
+            data-length="1"
+            data-ship="boat2"
+            src="./images/boat2.png"
+            width="50"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Boat 3</h3>
+          <img
+            data-length="1"
+            data-ship="boat3"
+            src="./images/boat3.png"
+            width="50"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Boat 4</h3>
+          <img
+            data-length="1"
+            data-ship="boat4"
+            src="./images/boat4.png"
+            width="50"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Destroyer 1</h3>
+          <i class="fa-solid fa-rotate"></i
+          ><img
+            data-length="2"
+            data-ship="destroyer1"
+            src="./images/destroyer1.png"
+            width="100"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Destroyer 2</h3>
+          <i class="fa-solid fa-rotate"></i
+          ><img
+            data-length="2"
+            data-ship="destroyer2"
+            src="./images/destroyer2.png"
+            width="100"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Destroyer 3</h3>
+          <i class="fa-solid fa-rotate"></i
+          ><img
+            data-length="2"
+            data-ship="destroyer3"
+            src="./images/destroyer3.png"
+            width="100"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Submarine 1</h3>
+          <i class="fa-solid fa-rotate"></i>
+          <img
+            data-length="3"
+            data-ship="submarine1"
+            src="./images/submarine1.png"
+            width="150"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Submarine 2</h3>
+          <i class="fa-solid fa-rotate"></i>
+          <img
+            data-length="3"
+            data-ship="submarine2"
+            src="./images/submarine2.png"
+            width="150"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+        <div>
+          <h3>Carrier</h3>
+          <i class="fa-solid fa-rotate"></i>
+          <img
+            data-length="4"
+            data-ship="carrier"
+            src="images/carrier.png"
+            width="200"
+            height="50"
+            class="horizontal"
+          />
+        </div>
+      </div>
+      <div class="statsContainer hidden"></div>
+      <div class="boardContainer">
+        <div class="player board"></div>
+      </div>
+    </main>
+
+    <audio id="miss" src="./audio/miss.mp3"></audio>
+    <audio id="score" src="./audio/score.mp3"></audio>
+    <audio id="shot" src="./audio/shot.mp3"></audio>
+    <audio id="sink" src="./audio/sink.mp3"></audio>
+  </body>
+</html>
