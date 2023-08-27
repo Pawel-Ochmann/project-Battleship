@@ -1,12 +1,14 @@
 const playerBoard = document.querySelector('.player.board');
 const board = document.querySelector('.boardContainer');
 const computerBoardNode = document.createElement('div');
+const cannon = document.querySelector('.cannon');
 computerBoardNode.classList.add('computer', 'board', 'hidden');
 
 const audio = (function () {
   const missAudio = document.querySelector('#miss');
   const scoreAudio = document.querySelector('#score');
   const shotAudio = document.querySelector('#shot');
+  shotAudio.volume = 0.5;
   const sinkAudio = document.querySelector('#sink');
 
   function clear() {
@@ -20,6 +22,7 @@ const audio = (function () {
     miss: function () {
       clear();
       missAudio.play();
+      console.log('miss');
     },
     score: function () {
       clear();
@@ -28,6 +31,7 @@ const audio = (function () {
     shot: function () {
       clear();
       shotAudio.play();
+      console.log('shot');
     },
     sink: function () {
       clear();
@@ -104,6 +108,7 @@ function appendBoardComputer(player) {
       });
     });
   }
+  cannon.classList.remove('cannonHidden');
 }
 
 // function returnField(e, fields) {
@@ -404,6 +409,8 @@ function makeMovePlayer() {
     });
   }
   board.classList.add('block');
+  cannon.classList.add('loading');
+  document.querySelector('.board.computer').classList.add('inactive');
   setTimeout(makeMoveComputer, 1000);
 }
 
@@ -530,6 +537,8 @@ function makeMoveComputer() {
   }
   setTimeout(() => {
     board.classList.remove('block');
+    cannon.classList.remove('loading');
+    document.querySelector('.board.computer').classList.remove('inactive');
   }, 1000);
 }
 
@@ -608,6 +617,7 @@ function getFieldsAroundHits(player) {
 }
 
 function winGame() {
+  cannon.classList.add('cannonHidden');
   const header = document.querySelector('header');
   header.textContent = '';
   const winTitle = document.createElement('h1');
@@ -630,6 +640,7 @@ function winGame() {
 }
 
 function loseGame() {
+  cannon.classList.add('cannonHidden');
   const header = document.querySelector('header');
   header.textContent = '';
   const loseTitle = document.createElement('h1');
@@ -668,7 +679,6 @@ function loadGif(phrase) {
     });
   return image;
 }
-
 
 module.exports = {
   appendBoardPlayer,

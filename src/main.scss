@@ -115,7 +115,6 @@ i {
     transform: scale(1.2);
     background-color: rgb(97, 97, 97);
     border: 2px solid white;
-    cursor: pointer;
   }
 }
 .statsContainer {
@@ -177,7 +176,7 @@ img.imageForMiss {
 }
 
 .box {
-  width: 1000px;
+  width: 500px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 2rem;
@@ -204,6 +203,42 @@ main > button {
   filter: brightness(0.5);
 }
 
-.board.computer>div {
-  cursor:url(./images/cursor.png) 25 25, crosshair;
+.board.computer {
+  cursor:
+    url(./images/cursor.png) 25 25,
+    crosshair;
+}
+
+.board.computer.inactive {
+  cursor: default;
+}
+
+.cannon {
+  overflow: visible;
+  padding: 0 1rem;
+  width: fit-content;
+  background-color: rgba(122, 241, 25, 0.555);
+  position: sticky;
+  left: 2rem;
+  top: 40%;
+}
+
+.cannonHidden {
+  display: none;
+}
+
+.loading {
+  animation-name: loading;
+  animation-duration: 2s;
+  animation-timing-function: ease-out;
+  transform-origin: left;
+}
+
+@keyframes loading {
+  from {
+    width: 0;
+  }
+  to {
+    width: 332px;
+  }
 }
