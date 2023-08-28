@@ -588,6 +588,7 @@ const audio = (function () {
   function clear() {
     missAudio.currentTime = 0;
     scoreAudio.currentTime = 0;
+    shotAudio.pause();
     shotAudio.currentTime = 0;
     sinkAudio.currentTime = 0;
   }
@@ -683,6 +684,10 @@ function appendBoardComputer(player) {
     });
   }
   cannon.classList.remove('cannonHidden');
+  const scoreAudio = document.querySelector('#score');
+  setTimeout(() => {
+    scoreAudio.pause();
+  }, 1000);
 }
 
 // function returnField(e, fields) {
