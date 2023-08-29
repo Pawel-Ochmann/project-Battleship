@@ -116,17 +116,6 @@ function appendBoardComputer(player) {
   }, 1000);
 }
 
-// function returnField(e, fields) {
-//   let field = null;
-//   for (const elem of fields) {
-//     if (e.x === elem.dataset.x && e.y === elem.dataset.y) {
-//       field = elem;
-//       break;
-//     }
-//   }
-//   return field;
-// }
-
 function getShipFieldsHorizontal(length, x, y, player) {
   const shipFields = [];
   for (let i = 0; i < length; i++) {
@@ -498,7 +487,16 @@ function makeMoveComputer() {
         `.board.player>div[data-x='${+lastFields[0].dataset
           .x}'][data-y='${after}']`
       );
-      fieldHit = fieldBefore || fieldAfter;
+
+      const divsToMatch = [];
+      if (fieldBefore) {
+        divsToMatch.push(fieldBefore);
+      }
+      if (fieldAfter) {
+        divsToMatch.push(fieldAfter);
+      }
+      fieldHit = divsToMatch[Math.floor(Math.random() * divsToMatch.length)];
+      
     }
   } else {
     const x = randomOneToTen();
